@@ -1,0 +1,25 @@
+.ant-table {
+    border: 1px solid #000000;
+}
+
+.ant-table-thead .ant-table-cell {
+  background-color: var(--box-color) !important;
+}
+
+.characteristic-column {
+  background-color: var(--critical-hover); /* or any color you prefer */
+  font-weight: bold;
+}
+
+.ant-table-tbody {
+    background-color: var(--tan-yellow);
+}
+
+/* .ant-table-tbody .ant-table-cell {
+    
+} */
+
+.score-input-number {
+  width: 50px;
+  font-size: 12px;
+}

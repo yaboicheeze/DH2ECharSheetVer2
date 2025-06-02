@@ -1,0 +1,33 @@
+.inscor-individual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--box-color);
+    color: white;
+}
+
+.inscor-individual label {
+    padding-bottom: 10px;
+}
+
+/* .insanity-input {
+    
+} */
+
+.insanity-input .ant-input-number-input {
+    text-align: center;
+}
+
+/* .ant-input-number.insanity-input input.ant-input-number-input:hover {
+  background-color: white;
+} */
+
+.inscor-individual p {
+    font-size: 20px;
+    margin: 0px;
+    margin-top: 10px;
+}

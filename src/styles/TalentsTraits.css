@@ -1,0 +1,37 @@
+.talents-traits-textarea {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+    padding: 0px;
+
+    width: 100%;
+    max-height: 200px;
+    resize: vertical;
+    overflow: auto;
+}
+
+.ant-collapse {
+    border: 1px solid #000000;
+    margin-bottom: 30px;
+}
+
+.small-collapse {
+    margin-bottom: 5px;
+}
+
+.ant-collapse-header {
+    background-color: var(--box-color);
+}
+
+.ant-collapse-content-box {
+    background-color: var(--tan-yellow);
+}
+
+.inscor-card-conatiner {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+}

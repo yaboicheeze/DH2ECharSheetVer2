@@ -1,0 +1,47 @@
+:root {
+  --box-color: #990505;
+  --tan-yellow: #fbf2cd;
+  --sub-text: black;
+  --bright-yellow: #ffe050;
+  --light-orange: #f9ca9c;
+  --dark-brown: #281714;
+  --less-dark-brown: #6c423a;
+  --critical-red: #bd1e1e;
+  --critical-hover: #b14545;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #281714;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  
+}
+
+.ant-input-number {
+  width: 80px;
+  font-size: 24px;
+  text-align: center;
+  text-align: center;
+}
+
+.ant-input-number .ant-input-number-input {
+  background-color: var(--tan-yellow);
+  text-align: center;
+  height: 40px;
+}
+
+.ant-input-number .ant-input-number-input:hover {
+  background-color: white;
+}
+
