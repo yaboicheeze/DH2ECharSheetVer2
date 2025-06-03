@@ -1,6 +1,7 @@
 import { Collapse, Table, Form, InputNumber } from 'antd';
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { db, updateCharacteristic } from '../db/dexieDB';
+import type { FormInstance } from 'antd/es/form';
 import '../styles/Characteristics.css';
 
 
@@ -14,9 +15,18 @@ interface EditableCellProps {
   [key: string]: any;
 }
 
+interface CharacteristicRow {
+  key: string;
+  id: string;
+  characteristic?: string;
+  score: number;
+  add: number;
+  mod: number;
+}
+
 const Characteristics = () => {
   // Editable context to share form instance
-  const EditableContext = React.createContext(null);
+  const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
   const EditableRow = ({ ...props }) => {
     const [form] = Form.useForm();
@@ -39,8 +49,8 @@ const Characteristics = () => {
     ...restProps
   }) => {
     const [editing, setEditing] = useState(false);
-    const inputRef = useRef(null);
-    const form = useContext(EditableContext);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const form = useContext(EditableContext)!;
 
     useEffect(() => {
       if (editing) {
@@ -125,7 +135,7 @@ const Characteristics = () => {
     };
   });
 
-  const [dataSource, setDataSource] = useState([]);
+  const [dataSource, setDataSource] = useState<CharacteristicRow[]>([]);
 
   const characteristicOrder = [
     'weaponScore',
