@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { db, returnTextBody, updateCharacteristic, updateTextBody } from '../db/dexieDB';
 import type { FormInstance } from 'antd/es/form';
 import '../styles/Characteristics.css';
+import { handleTextChange } from '../utilities/helperFunction';
 
 
 interface EditableCellProps {
@@ -200,11 +201,14 @@ const Characteristics = () => {
     // setDataSource(newData);
   };
 
-  const onAptitudeChange = async () => {
-    const element = document.getElementById("aptitudes") as HTMLTextAreaElement;
-    const bodyToUpdate = element.value;
-    updateTextBody("aptitudes", 1, bodyToUpdate);
-  }
+  const titleMap: Record<number, React.Dispatch<React.SetStateAction<string>>> = {
+    1: setAptitudesText,
+  };
+
+  const onAptitudeChange = (index: number) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      handleTextChange(e, index, "aptitudes", titleMap);
+    };
+
 
   return (
     <div>
@@ -215,7 +219,7 @@ const Characteristics = () => {
           {
             key: '1',
             label: 'Aptitudes',
-            children: <textarea id="aptitudes" className='talents-traits-textarea' value={aptitudesText} onChange={onAptitudeChange} />,
+            children: <textarea id="aptitudes" className='talents-traits-textarea' value={aptitudesText} onChange={onAptitudeChange(1)} />,
           },
         ]}
       />
