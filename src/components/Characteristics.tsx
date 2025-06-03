@@ -1,6 +1,6 @@
 import { Collapse, Table, Form, InputNumber } from 'antd';
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { db, updateCharacteristic } from '../db/dexieDB';
+import { db, returnTextBody, updateCharacteristic, updateTextBody } from '../db/dexieDB';
 import type { FormInstance } from 'antd/es/form';
 import '../styles/Characteristics.css';
 
@@ -137,6 +137,8 @@ const Characteristics = () => {
 
   const [dataSource, setDataSource] = useState<CharacteristicRow[]>([]);
 
+  const [aptitudesText, setAptitudesText] = useState('');
+
   const characteristicOrder = [
     'weaponScore',
     'ballisticScore',
@@ -166,6 +168,9 @@ const Characteristics = () => {
         mod: item.charMod ?? 1,
       }));
       setDataSource(tableData);
+
+      const text = await returnTextBody("aptitudes", 1);
+      setAptitudesText(text ?? '');
     };
 
     fetchData();
@@ -187,18 +192,19 @@ const Characteristics = () => {
 
     const store = await db.characteristics.get(charId);
 
-    console.log("Value before assigned: [" + charId + "] - [" + updatedRow.score + "] - [" + updatedRow.add + "] - [" + updatedRow.mod + "]");
-
     updatedRow.score = store?.charScore ?? 10;
     updatedRow.add = store?.charModBonus ?? 0;
     updatedRow.mod = store?.charMod ?? 1;
 
-    console.log("Value from database: [" + charId + "] - [" + store?.charScore + "] - [" + store?.charModBonus + "] - [" + store?.charMod + "]");
-    console.log("Value once assigned: [" + charId + "] - [" + updatedRow.score + "] - [" + updatedRow.add + "] - [" + updatedRow.mod + "]");
-
     // newData.splice(index, 1, updatedRow);
     // setDataSource(newData);
   };
+
+  const onAptitudeChange = async () => {
+    const element = document.getElementById("aptitudes") as HTMLTextAreaElement;
+    const bodyToUpdate = element.value;
+    updateTextBody("aptitudes", 1, bodyToUpdate);
+  }
 
   return (
     <div>
@@ -209,7 +215,7 @@ const Characteristics = () => {
           {
             key: '1',
             label: 'Aptitudes',
-            children: <textarea id="talent-text" className='talents-traits-textarea' />,
+            children: <textarea id="aptitudes" className='talents-traits-textarea' value={aptitudesText} onChange={onAptitudeChange} />,
           },
         ]}
       />

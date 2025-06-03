@@ -11,7 +11,7 @@ const items: TabsProps['items'] = [
   {
     // Characteristics and Skills
     key: '1',
-    label: 'Talent Traits',
+    label: 'Talent, Traits, Bonuses',
     children: <TalentsTraits />,
   },
   {

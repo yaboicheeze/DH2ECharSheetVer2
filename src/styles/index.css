@@ -23,10 +23,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-html,
+/* html,
 body {
   
-}
+} */
 
 .ant-input-number {
   width: 80px;

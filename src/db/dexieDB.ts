@@ -10,95 +10,110 @@ export interface Characteristic {
   charMod?: number;
 }
 
+export interface Aptitudes {
+  id: number;
+  textBody: string;
+}
+
 export interface Armor {
-    id: string;
-    armorTotal?: number;
-    armorBonus?: number;
+  id: string;
+  armorTotal?: number;
+  armorBonus?: number;
 }
 
 export interface Skills {
-    id: string;
-    skillLevel?: number;
+  id: string;
+  skillLevel?: number;
 }
 
 export interface MiscStats {
-    id: string;
-    value?: number;
+  id: string;
+  value?: number;
 }
 
 export interface Inventory {
-    id: number;
-    invName?: string;
-    invWeight?: number;
-    invQuantity?: number;
-    invDescription?: string;
+  id: number;
+  invName?: string;
+  invWeight?: number;
+  invQuantity?: number;
+  invDescription?: string;
 }
 
 export interface Weapons {
-    id: number;
-    weapName?: string;
-    weapDMG?: string;
-    weapPEN?: string;
-    weapROF?: string;
-    weapRange?: string;
-    weapClip?: string;
-    weapReload?: string;
-    weapClass?: string;
-    weapWeight?: string;
-    weapAvailability?: string;
-    weapNotes?: string;
+  id: number;
+  weapName?: string;
+  weapDMG?: string;
+  weapPEN?: string;
+  weapROF?: string;
+  weapRange?: string;
+  weapClip?: string;
+  weapReload?: string;
+  weapClass?: string;
+  weapWeight?: string;
+  weapAvailability?: string;
+  weapNotes?: string;
 }
 
 export interface PsykerPowers {
-    id: number;
-    psyAction?: string;
-    psyFocusPower?: string;
-    psyRange?: string;
-    psySustained?: string;
-    psySubtype?: string;
-    psyEffect?: string;
+  id: number;
+  psyAction?: string;
+  psyFocusPower?: string;
+  psyRange?: string;
+  psySustained?: string;
+  psySubtype?: string;
+  psyEffect?: string;
 }
 
 export interface TalentTraitBonus {
-    id: number;
-    notesBody?: string;
+  id: number;
+  textBody?: string;
 }
 
 export interface ThreeMs {
-    id: number;
-    notesBody?: string;
+  id: number;
+  textBody?: string;
 }
 
 export interface CharacterInfo {
-    id: string;
-    notesBody?: string;
+  id: number;
+  textBody?: string;
 }
 
 export interface Notes {
-    id: number;
-    notesBody?: string;
+  id: number;
+  textTitle?: string;
+  textBody?: string;
 }
 
 // Create Dexie DB instance
 export class MyDB extends Dexie {
   characteristics!: Table<Characteristic, string>;
   armor!: Table<Armor, string>;
+  aptitudes!: Table<Aptitudes, number>;
   skills!: Table<Skills, string>;
   miscStats!: Table<MiscStats, string>;
   inventory!: Table<Inventory, number>;
   weapons!: Table<Weapons, number>;
   psykerPowers!: Table<PsykerPowers, number>;
+  notes!: Table<Notes, number>;
+  talentTraitBonus!: Table<TalentTraitBonus, number>;
+  threeMs!: Table<ThreeMs, number>;
 
   constructor() {
     super("MyDB");
 
     this.version(1).stores({
       characteristics: "id",
+      armor: "id",
+      aptitudes: "id",
       skills: "id",
       miscStats: "id",
       inventory: "id",
       weapons: "id",
       psykerPowers: "id",
+      notes: "id",
+      talentTraitBonus: "id",
+      threeMs: "id",
     });
 
     // 💡 This only runs when the DB is first created (first time user loads app)
@@ -115,6 +130,23 @@ export class MyDB extends Dexie {
         { id: "fellowScore", charName: 'Fellowship', charScore: 10, charModBonus: 0, charMod: 1 },
         { id: "influenceScore", charName: 'Influence', charScore: 10, charModBonus: 0, charMod: 1 },
       ]);
+
+      await this.aptitudes.bulkPut([
+        { id: 1, textBody: '1: \n2: \n3: \n4: \n5: \n6: ' },
+      ]);
+
+      await this.talentTraitBonus.bulkPut([
+        { id: 1, textBody: '' },
+        { id: 2, textBody: '' },
+        { id: 3, textBody: '' },
+      ]);
+
+      await this.threeMs.bulkPut([
+        { id: 1, textBody: '' },
+        { id: 2, textBody: '' },
+        { id: 3, textBody: '' },
+      ]);
+
 
       await this.miscStats.bulkPut([
         { id: "carryTotal", value: 4.5 },
@@ -184,32 +216,48 @@ export async function addItem() {
   console.log("added the items");
 }
 
-export async function updateCharacteristic(charId:string, value:number, add:number) {
-    await db.characteristics.update(charId, { charScore: value, charModBonus: add });
-    const updatedMod = Math.floor((value / 10) % 10 + add);
-    await db.characteristics.update(charId, { charMod: updatedMod });
+export async function updateCharacteristic(charId: string, value: number, add: number) {
+  await db.characteristics.update(charId, { charScore: value, charModBonus: add });
+  const updatedMod = Math.floor((value / 10) % 10 + add);
+  await db.characteristics.update(charId, { charMod: updatedMod });
 }
 
-// export async function applyCharacteristic(charId:string) {
-    
+const storeMap = {
+  aptitudes: db.aptitudes,
+  menMalMut: db.threeMs,
+  talTraBon: db.talentTraitBonus,
+  skills: db.skills,
+  notes: db.notes,
+};
 
-// }
+export type StoreName = keyof typeof storeMap;
 
-export async function returnCharScore(charId: string) {
-  const value = await db.characteristics.get(charId);
-  return value?.charScore;
+export async function updateTextBody(storeName: StoreName, elementId: number, body: string) {
+  const store = storeMap[storeName] as Dexie.Table<any, any>;
+  const exists = await store.get(elementId);
+
+  if (exists) {
+    await store.update(elementId, { textBody: body });
+  }
+  else {
+    await store.put({ id: elementId, textBody: body });
+  }
 }
 
-// export async function setSkill(skillId:string, value:)
+export async function returnTextBody(storeName: StoreName, loopAmount:number) {
+  const store = storeMap[storeName] as Dexie.Table<any, any>;
+  const textToReturn = await store.get(loopAmount);
+  return textToReturn?.textBody;
+}
 
-export async function loadFromMemory(){
+export async function loadFromMemory() {
 
 }
 
-export async function loadFromFile(){
-    
+export async function loadFromFile() {
+
 }
 
-export async function saveToFile(){
-    
+export async function saveToFile() {
+
 }
