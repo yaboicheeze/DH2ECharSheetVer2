@@ -1,7 +1,7 @@
 import { Collapse } from 'antd';
 import '../styles/TalentsTraits.css';
-import { useEffect, useState } from 'react';
-import { returnTextBody } from '../db/dexieDB';
+import { useEffect } from 'react';
+// import { returnTextBody } from '../db/dexieDB';
 
 // const ids = [
 //   'charName',
@@ -24,7 +24,7 @@ import { returnTextBody } from '../db/dexieDB';
 
 const CharInfo = () => {
 
-  const [charText, setCText] = useState<string[]>(['', '']);
+  // const [charText, setCText] = useState<string[]>(['', '']);
 
   const labels = [
     'Character Name',
