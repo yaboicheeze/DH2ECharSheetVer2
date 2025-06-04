@@ -218,7 +218,8 @@ const storeMap = {
   skills: db.skills,
   notes: db.notes,
   charInfo: db.charInfo,
-};
+  miscStats: db.charInfo,
+}
 
 export type StoreName = keyof typeof storeMap;
 
@@ -234,16 +235,44 @@ export async function updateTextBody(storeName: StoreName, elementId: number, bo
   }
 }
 
+export async function updateNote(storeName: StoreName, elementId: number | undefined, title: string, body: string) {
+  const store = storeMap[storeName] as Dexie.Table<any, any>;
+
+  if (elementId !== undefined) {
+    const exists = await store.get(elementId);
+    if (exists) {
+      await store.update(elementId, { textTitle: title, textBody: body });
+      return;
+    }
+  }
+
+  // Find next available id
+  const maxIdRecord = await store.orderBy('id').last();
+  const nextId = maxIdRecord ? maxIdRecord.id + 1 : 1;
+
+  await store.put({ id: nextId, textTitle: title, textBody: body });
+}
+
 export async function returnTextBody(storeName: StoreName, loopAmount:number) {
   const store = storeMap[storeName] as Dexie.Table<any, any>;
   const textToReturn = await store.get(loopAmount);
   return textToReturn?.textBody;
 }
 
-export async function returnTextBodyLabel(storeName: StoreName, id: number) {
+// export async function returnTextBodyLabel(storeName: StoreName, id: number) {
+//   const store = storeMap[storeName] as Dexie.Table<any, any>;
+//   const textToReturn = await store.get(id);
+//   return textToReturn?.textLabel;
+// }
+
+export async function getAllText(storeName: StoreName) {
   const store = storeMap[storeName] as Dexie.Table<any, any>;
-  const textToReturn = await store.get(id);
-  return textToReturn?.textLabel;
+  return await store.toArray();
+}
+
+export async function getHeaderNumbers() {
+  const store = db.miscStats;
+  return await store.toArray();
 }
 
 export async function loadFromMemory() {

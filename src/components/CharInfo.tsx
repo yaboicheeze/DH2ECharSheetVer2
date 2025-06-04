@@ -1,8 +1,9 @@
 import { Collapse } from 'antd';
-import '../styles/TalentsTraits.css';
 import { useEffect, useState } from 'react';
 import { returnTextBody } from '../db/dexieDB';
 import { handleDynamicTextChange } from '../utilities/helperFunction';
+
+import '../styles/TalentsTraits.css';
 
 const CharInfo = () => {
 

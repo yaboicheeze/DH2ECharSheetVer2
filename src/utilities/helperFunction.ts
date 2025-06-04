@@ -20,3 +20,22 @@ export async function handleDynamicTextChange(e: React.ChangeEvent<HTMLTextAreaE
   // Update IndexedDB
   await updateTextBody(storeName, index, value);
 }
+
+interface HasTextBodyAndId {
+  id: number;
+  textBody?: string;
+}
+
+export async function handleObjectTextChange<T extends HasTextBodyAndId>(e: React.ChangeEvent<HTMLTextAreaElement>, objectId: number, storeName: StoreName, setArrayState: React.Dispatch<React.SetStateAction<T[]>> ): Promise<void> {
+  const value = e.target.value;
+
+  // Update local state
+  setArrayState(prev => {
+    return prev.map(item =>
+      item.id === objectId ? { ...item, textBody: value } : item
+    );
+  });
+
+  // Update IndexedDB
+  await updateTextBody(storeName, objectId, value);
+}

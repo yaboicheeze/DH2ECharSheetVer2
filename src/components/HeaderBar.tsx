@@ -1,8 +1,37 @@
 import { InputNumber } from 'antd';
+// import { returnTextBody } from '../db/dexieDB';
+import { useEffect } from 'react';
 
 import '../styles/Header.css'
+import { getHeaderNumbers } from '../db/dexieDB';
 
 export default function HeaderBar() {
+
+    // const [menDisText, setMenDisText] = useState('');
+    // const [malignanceText, setMalignanceText] = useState('');
+    // const [mutationText, setMutationText] = useState('');
+
+    // const titleMap: Record<number, React.Dispatch<React.SetStateAction<string>>> = {
+    //     1: setMenDisText,
+    //     2: setMalignanceText,
+    //     3: setMutationText,
+    // };
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+
+    //         for (let i = 1; i <= Object.keys(titleMap).length; i++) {
+    //             const text = await returnTextBody("menMalMut", i);
+    //             titleMap[i](text ?? '');
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, []);
+    useEffect(() => {
+        getHeaderNumbers();
+    })
+
     return (
         <div className='header-bar'>
             <div className='title-container'>

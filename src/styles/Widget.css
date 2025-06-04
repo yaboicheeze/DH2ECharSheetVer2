@@ -28,6 +28,9 @@ img {
 }
 
 .sub-widget-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;;
     border-radius: 5px;
     background-color: var(--light-orange);
 }
