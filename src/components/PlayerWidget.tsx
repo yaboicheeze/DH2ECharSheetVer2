@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/Widget.css';
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 
@@ -18,6 +17,8 @@ import IconPsyker from '../assets/magic-21-512.png';
 import IconThreeMsTwoTs from '../assets/mmmtt.png';
 import IconCharInfo from '../assets/profile.png';
 import IconNotes from '../assets/notes.png';
+
+import '../styles/Widget.css';
 
 const items: TabsProps['items'] = [
   {

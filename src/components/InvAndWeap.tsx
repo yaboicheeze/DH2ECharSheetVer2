@@ -1,9 +1,3 @@
-// const InvAndWeap = () => {
-//   return <div>This is Tab 1 content</div>;
-// };
-
-// export default InvAndWeap;
-
 import React from 'react';
 import '../styles/Widget.css';
 import { Tabs } from 'antd';

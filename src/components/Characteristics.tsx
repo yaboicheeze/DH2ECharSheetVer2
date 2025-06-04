@@ -2,8 +2,9 @@ import { Collapse, Table, Form, InputNumber } from 'antd';
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { db, returnTextBody, updateCharacteristic } from '../db/dexieDB';
 import type { FormInstance } from 'antd/es/form';
-import '../styles/Characteristics.css';
 import { handleTextChange } from '../utilities/helperFunction';
+
+import '../styles/Characteristics.css';
 
 
 interface EditableCellProps {

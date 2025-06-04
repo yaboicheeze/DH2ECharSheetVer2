@@ -1,10 +1,11 @@
 import React from 'react';
-import '../styles/Widget.css';
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 
 import Characteristics from './Characteristics';
 import Skills from './Skills';
+
+import '../styles/Widget.css';
 
 
 const items: TabsProps['items'] = [

@@ -1,30 +1,13 @@
 import { Collapse } from 'antd';
 import '../styles/TalentsTraits.css';
-import { useEffect } from 'react';
-// import { returnTextBody } from '../db/dexieDB';
-
-// const ids = [
-//   'charName',
-//   'charRole',
-//   'charHomeWorld',
-//   'charBackground',
-//   'charEliteAdvances',
-//   'charDivination',
-//   'charAge',
-//   'charBuild',
-//   'charComplexion',
-//   'charHair',
-//   'charGender',
-//   'charQuirks',
-//   'charAllies',
-//   'charEnemies',
-//   'charSuperstitions',
-//   'charcharMementos'
-// ];
+import { useEffect, useState } from 'react';
+import { returnTextBody } from '../db/dexieDB';
+import { handleDynamicTextChange } from '../utilities/helperFunction';
 
 const CharInfo = () => {
 
-  // const [charText, setCText] = useState<string[]>(['', '']);
+  // To make this fully dynamic for notes section, move labels to the database and fetch them dynamically as well.
+  // Make a function in dexieDB to fetch labels
 
   const labels = [
     'Character Name',
@@ -45,24 +28,41 @@ const CharInfo = () => {
     'Mementos'
   ];
 
+  const [charText, setCText] = useState<string[]>(Array(labels.length).fill(''));
+
+  const onCChange = (index: number) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const newText = e.target.value;
+
+  // Update local state
+  setCText(prev => {
+    const updated = [...prev];
+    updated[index] = newText;
+    return updated;
+  });
+
+  // Update database (index + 1 to match your DB keys)
+  handleDynamicTextChange(e, index, "charInfo", setCText);
+};
+
   useEffect(() => {
-      const fetchData = async () => {
-  
-        // for (let i = 1; i <= Object.keys(labels).length; i++) {
-        //   const text = await returnTextBody("talTraBon", i);
-        //   titleMap[i](text ?? '');
-        // }
-        
-      };
-  
-      fetchData();
-    }, []);
+  const fetchData = async () => {
+    const newTextArray: string[] = [];
+    for (let i = 0; i < labels.length; i++) {
+      const text = await returnTextBody("charInfo", i);
+      newTextArray.push(text ?? '');
+    }
+    setCText(newTextArray);
+  };
+
+  fetchData();
+}, []);
 
   return (
     <div className='sub-widget-content'>
       {labels.map((label, index) => {
         const key = (index + 1);
         const textareaId = `charInfoTextarea-${key}`;
+        const textAreaValue = charText[index] || '';
         return (
           <Collapse
             key={key}
@@ -72,7 +72,7 @@ const CharInfo = () => {
                 key,
                 label, // This will display as the collapse header
                 children: (
-                  <textarea id={textareaId} name={label} className="talents-traits-textarea" />
+                  <textarea id={textareaId} name={label} className="talents-traits-textarea" value={textAreaValue} onChange={onCChange(index)} />
                 ),
               },
             ]}

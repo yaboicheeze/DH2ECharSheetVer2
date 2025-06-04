@@ -33,7 +33,7 @@ export interface MiscStats {
 
 export interface Inventory {
   id: number;
-  invName?: string;
+  textTitle?: string;
   invWeight?: number;
   invQuantity?: number;
   invDescription?: string;
@@ -41,7 +41,7 @@ export interface Inventory {
 
 export interface Weapons {
   id: number;
-  weapName?: string;
+  textTitle?: string;
   weapDMG?: string;
   weapPEN?: string;
   weapROF?: string;
@@ -98,6 +98,7 @@ export class MyDB extends Dexie {
   notes!: Table<Notes, number>;
   talentTraitBonus!: Table<TalentTraitBonus, number>;
   threeMs!: Table<ThreeMs, number>;
+  charInfo!: Table<CharacterInfo, number>;
 
   constructor() {
     super("MyDB");
@@ -114,6 +115,7 @@ export class MyDB extends Dexie {
       notes: "id",
       talentTraitBonus: "id",
       threeMs: "id",
+      charInfo: "id",
     });
 
     // 💡 This only runs when the DB is first created (first time user loads app)
@@ -134,19 +136,6 @@ export class MyDB extends Dexie {
       await this.aptitudes.bulkPut([
         { id: 1, textBody: '1: \n2: \n3: \n4: \n5: \n6: ' },
       ]);
-
-      await this.talentTraitBonus.bulkPut([
-        { id: 1, textBody: '' },
-        { id: 2, textBody: '' },
-        { id: 3, textBody: '' },
-      ]);
-
-      await this.threeMs.bulkPut([
-        { id: 1, textBody: '' },
-        { id: 2, textBody: '' },
-        { id: 3, textBody: '' },
-      ]);
-
 
       await this.miscStats.bulkPut([
         { id: "carryTotal", value: 4.5 },
@@ -228,6 +217,7 @@ const storeMap = {
   talTraBon: db.talentTraitBonus,
   skills: db.skills,
   notes: db.notes,
+  charInfo: db.charInfo,
 };
 
 export type StoreName = keyof typeof storeMap;
@@ -248,6 +238,12 @@ export async function returnTextBody(storeName: StoreName, loopAmount:number) {
   const store = storeMap[storeName] as Dexie.Table<any, any>;
   const textToReturn = await store.get(loopAmount);
   return textToReturn?.textBody;
+}
+
+export async function returnTextBodyLabel(storeName: StoreName, id: number) {
+  const store = storeMap[storeName] as Dexie.Table<any, any>;
+  const textToReturn = await store.get(id);
+  return textToReturn?.textLabel;
 }
 
 export async function loadFromMemory() {
